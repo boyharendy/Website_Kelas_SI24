@@ -1,16 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { db } from './db/index.js';
-import { students, achievements, gallery, guestbook } from './db/schema.js';
+import { db } from '../backend/db/index.js';
+import { students, achievements, gallery, guestbook } from '../backend/db/schema.js';
 import { eq } from 'drizzle-orm';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); // Increased limit for base64 images
@@ -69,9 +63,8 @@ app.get('/api/achievements', async (req, res) => {
 app.post('/api/achievements', async (req, res) => {
   try {
     const data = req.body;
-    // Assuming data is an array if we replace all, or a single object
     if (Array.isArray(data)) {
-      await db.delete(achievements); // Clear table
+      await db.delete(achievements);
       if (data.length > 0) {
         await db.insert(achievements).values(data);
       }
@@ -183,14 +176,5 @@ app.delete('/api/guestbook/:id', async (req, res) => {
   }
 });
 
-// --- SERVE FRONTEND (FOR PRODUCTION DEPLOYMENT) ---
-const distPath = path.join(__dirname, '../dist');
-app.use(express.static(distPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Export app for Vercel Serverless Function
+export default app;

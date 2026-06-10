@@ -4,17 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node backend/server.js",
+    "start": "node local-server.js",
     "dev": "concurrently \"npm run server\" \"vite\"",
-    "server": "node backend/server.js",
+    "server": "node local-server.js",
     "db:studio": "drizzle-kit studio",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.3",
     "@tailwindcss/vite": "^4.3.0",
-    "better-sqlite3": "^12.10.0",
     "concurrently": "^10.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
