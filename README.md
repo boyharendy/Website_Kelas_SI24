@@ -1,6 +1,6 @@
 # Website Kelas SI24
 
-Proyek ini adalah aplikasi/website yang dibangun khusus untuk mengelola data dan informasi Kelas SI24. Aplikasi ini menggunakan teknologi *fullstack* modern dengan spesifikasi berikut:
+Proyek ini adalah aplikasi/website yang dibangun khusus untuk mengelola data dan informasi Kelas SI24. Aplikasi ini menggunakan arsitektur *Serverless Fullstack* modern dengan spesifikasi berikut:
 
 ## Teknologi yang Digunakan
 
@@ -11,24 +11,47 @@ Proyek ini adalah aplikasi/website yang dibangun khusus untuk mengelola data dan
 - **Framer Motion**: Digunakan untuk menambahkan animasi yang halus pada antarmuka aplikasi.
 
 ### ⚙️ Backend (Sistem Server)
-- **Node.js**: *Environment* untuk menjalankan JavaScript di sisi server.
-- **Express.js**: Framework backend yang ringan dan cepat untuk membangun REST API dan logika server.
+- **Node.js & Express.js**: Framework backend untuk membangun REST API dan logika server.
+- **Vercel Serverless Functions**: Mengubah rute Express menjadi *Serverless Functions* di *cloud* melalui file konfigurasi `api/index.js` dan `vercel.json`.
 
 ### 🗄️ Database (Basis Data)
-- **SQLite**: Sistem basis data relasional (*SQL*) yang ringan dan disimpan secara lokal (menggunakan `better-sqlite3`).
-- **Drizzle ORM**: Alat perantara (ORM) untuk berinteraksi dengan database SQLite secara aman dan mudah.
-
-### ☁️ Layanan Tambahan
-- **Firebase**: Terintegrasi untuk layanan *cloud* pihak ketiga (biasanya digunakan untuk autentikasi pengguna atau penyimpanan file).
+- **Turso**: Database Edge berbasis SQLite yang sangat cepat dan di-hosting di *cloud*.
+- **Drizzle ORM**: Alat perantara (ORM) untuk berinteraksi dengan database Turso secara aman, dengan menggunakan client HTTP `@libsql/client/web` agar kompatibel penuh dengan lingkungan *Serverless*.
+- **Firebase**: Terintegrasi untuk layanan penyimpanan gambar (Firebase Storage).
 
 ## Cara Menjalankan Proyek Secara Lokal
 
-1. Buka terminal di folder proyek ini.
-2. Instal semua *dependencies* yang dibutuhkan:
-   ```bash
-   npm install
-   ```
-3. Jalankan aplikasi (menjalankan Frontend & Backend sekaligus):
-   ```bash
-   npm run dev
-   ```
+### 1. Kloning & Instalasi
+Buka terminal di folder proyek ini dan instal semua *dependencies* yang dibutuhkan:
+```bash
+npm install
+```
+
+### 2. Konfigurasi Environment Variables
+Buat file bernama `.env` di *root* folder proyek Anda, lalu masukkan kredensial database Turso Anda:
+```env
+TURSO_DATABASE_URL="libsql://<NAMA_DB>-<USERNAME>.turso.io"
+TURSO_AUTH_TOKEN="<TOKEN_RAHASIA_DARI_TURSO>"
+```
+
+### 3. Migrasi Database (Opsional jika tabel belum dibuat)
+Untuk mencetak tabel database (seperti tabel *students*, *achievements*, dll) ke dalam Turso Anda:
+```bash
+npx drizzle-kit push
+```
+
+### 4. Jalankan Aplikasi
+Jalankan perintah berikut untuk menyalakan Frontend dan Backend sekaligus:
+```bash
+npm run dev
+```
+Website akan dapat diakses di `http://localhost:5173/` dan API berjalan di `http://localhost:3000/`.
+
+## Cara Deployment (Hosting) ke Vercel
+
+1. Buat akun di [Vercel](https://vercel.com/) dan tautkan dengan repositori GitHub proyek ini.
+2. Saat mengimpor proyek, pastikan Anda menambahkan pengaturan **Environment Variables** di layar Vercel:
+   - `TURSO_DATABASE_URL`
+   - `TURSO_AUTH_TOKEN`
+3. Vercel akan otomatis mengenali konfigurasi `vercel.json` dan membangun aplikasi *frontend* sekaligus mengubah folder `api` menjadi *Serverless Functions*.
+4. Selesai! Website siap diakses secara publik.
