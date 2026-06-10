@@ -1,0 +1,18 @@
+export const galleryData = [
+  { id: "g1", src: "https://picsum.photos/seed/kelas1/600/400", caption: "Orientasi Mahasiswa Baru", category: "akademik" },
+  { id: "g2", src: "https://picsum.photos/seed/kelas2/500/700", caption: "Sesi Brainstorming Proyek", category: "proyek" },
+  { id: "g3", src: "https://picsum.photos/seed/kelas3/600/500", caption: "Ngopi Bareng Setelah Kelas", category: "nongkrong" },
+  { id: "g4", src: "https://picsum.photos/seed/kelas4/600/800", caption: "Workshop UI/UX Design", category: "akademik" },
+  { id: "g5", src: "https://picsum.photos/seed/kelas5/500/400", caption: "Makan Siang di Kantin", category: "nongkrong" },
+  { id: "g6", src: "https://picsum.photos/seed/kelas6/700/500", caption: "Presentasi Final Project", category: "proyek" },
+  { id: "g7", src: "https://picsum.photos/seed/kelas7/500/600", caption: "Study Group Malam", category: "akademik" },
+  { id: "g8", src: "https://picsum.photos/seed/kelas8/600/450", caption: "Hackathon Weekend", category: "proyek" },
+  { id: "g9", src: "https://picsum.photos/seed/kelas9/550/700", caption: "Jalan-jalan Sore di Kampus", category: "nongkrong" },
+  { id: "g10", src: "https://picsum.photos/seed/kelas10/600/400", caption: "Kompetisi Programming", category: "akademik" },
+  { id: "g11", src: "https://picsum.photos/seed/kelas11/500/500", caption: "Demo Day Proyek Akhir", category: "proyek" },
+  { id: "g12", src: "https://picsum.photos/seed/kelas12/650/500", caption: "Karaoke Night", category: "nongkrong" },
+  { id: "g13", src: "https://picsum.photos/seed/kelas13/500/650", caption: "Seminar Teknologi", category: "akademik" },
+  { id: "g14", src: "https://picsum.photos/seed/kelas14/600/400", caption: "Sprint Review Meeting", category: "proyek" },
+  { id: "g15", src: "https://picsum.photos/seed/kelas15/550/450", caption: "Nonton Bareng di Aula", category: "nongkrong" },
+  { id: "g16", src: "https://picsum.photos/seed/kelas16/600/750", caption: "Lab Praktikum Jaringan", category: "akademik" },
+];
