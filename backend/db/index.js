@@ -3,15 +3,19 @@ import { createClient } from '@libsql/client';
 import * as schema from './schema.js';
 import dotenv from 'dotenv';
 
-// Load environment variables locally
 dotenv.config();
 
-// Create LibSQL client
-// If TURSO_DATABASE_URL is not set, it will fallback to local file "sqlite.db"
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL || 'file:backend/db/sqlite.db',
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+let client;
+export let dbError = null;
+export let db = null;
 
-// Create Drizzle database instance
-export const db = drizzle(client, { schema });
+try {
+  client = createClient({
+    url: process.env.TURSO_DATABASE_URL || 'file:backend/db/sqlite.db',
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  });
+  db = drizzle(client, { schema });
+} catch (error) {
+  dbError = error.message || String(error);
+  console.error("FAILED TO CREATE LIBSQL CLIENT:", error);
+}
