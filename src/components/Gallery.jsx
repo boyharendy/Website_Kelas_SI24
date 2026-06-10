@@ -16,11 +16,11 @@ const Gallery = () => {
   // Data State
   const [gallery, setGallery] = useState([]);
   const [activeFilter, setActiveFilter] = useState('semua');
-  
+
   // Lightbox State
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   // Admin Mode State
   const [isAdmin, setIsAdmin] = useState(false);
   const [showTokenPrompt, setShowTokenPrompt] = useState(false);
@@ -154,7 +154,7 @@ const Gallery = () => {
       alert("Harap unggah atau masukkan gambar!");
       return;
     }
-    
+
     try {
       if (isAdding) {
         const newItem = { ...editForm, id: `g_${Date.now()}` };
@@ -189,7 +189,7 @@ const Gallery = () => {
       try {
         const photosToUpdate = gallery.filter(item => item.category === catId);
         const newGallery = [...gallery];
-        
+
         for (const photo of photosToUpdate) {
           const updatedPhoto = { ...photo, category: 'akademik' };
           await fetch(`/api/gallery/${photo.id}`, {
@@ -200,10 +200,10 @@ const Gallery = () => {
           const index = newGallery.findIndex(p => p.id === photo.id);
           if (index !== -1) newGallery[index] = updatedPhoto;
         }
-        
+
         setGallery(newGallery);
         if (activeFilter === catId) setActiveFilter('semua');
-        if (editForm.category === catId) setEditForm({...editForm, category: ''});
+        if (editForm.category === catId) setEditForm({ ...editForm, category: '' });
       } catch (err) {
         console.error(err);
         alert('Gagal menghapus kategori.');
@@ -214,11 +214,11 @@ const Gallery = () => {
   return (
     <section id="galeri" className="section relative overflow-hidden">
       <div className="container-custom relative z-10">
-        
+
         {/* Admin Toggle Button */}
         <div className="absolute top-0 right-0 z-20">
           {!isAdmin ? (
-            <button 
+            <button
               onClick={() => {
                 setShowTokenPrompt(true);
                 setTokenError('');
@@ -229,7 +229,7 @@ const Gallery = () => {
               <Settings size={20} />
             </button>
           ) : (
-            <button 
+            <button
               onClick={() => setIsAdmin(false)}
               className="px-4 py-1.5 text-xs font-bold text-white bg-danger rounded-full transition-colors hover:bg-red-600 flex items-center gap-1 shadow-lg"
               title="Keluar Mode Admin"
@@ -239,7 +239,7 @@ const Gallery = () => {
           )}
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -251,12 +251,12 @@ const Gallery = () => {
               <Camera size={16} /> Galeri Memori
             </div>
             <h2 className="section-title">Momen yang Tak Terlupakan</h2>
-            <p className="section-subtitle ml-0">Dari kelas hingga luar kampus — setiap memori berharga bagi kami.</p>
+            <p className="section-subtitle ml-0">Dari kelas hingga luar kampus setiap memori berharga bagi kami.</p>
           </div>
         </motion.div>
 
         {/* Filters & Add Button */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -268,11 +268,10 @@ const Gallery = () => {
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeFilter === filter.id 
-                    ? 'bg-accent text-bg-primary shadow-[0_4px_15px_rgba(240,192,64,0.3)]' 
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeFilter === filter.id
+                    ? 'bg-accent text-bg-primary shadow-[0_4px_15px_rgba(240,192,64,0.3)]'
                     : 'bg-bg-card border border-border-primary text-text-secondary hover:bg-glass-strong hover:text-text-primary'
-                }`}
+                  }`}
               >
                 {filter.label}
               </button>
@@ -280,7 +279,7 @@ const Gallery = () => {
           </div>
 
           {isAdmin && (
-            <button 
+            <button
               onClick={openAddModal}
               className="px-5 py-2 rounded-full bg-accent text-bg-primary font-bold flex items-center gap-2 transition-all hover:bg-[#e6a800] hover:scale-105 shadow-[0_4px_15px_rgba(240,192,64,0.3)]"
             >
@@ -304,13 +303,13 @@ const Gallery = () => {
                   onClick={() => openLightbox(index)}
                   className={`break-inside-avoid relative group rounded-2xl overflow-hidden bg-bg-card border border-border-primary ${!isAdmin ? 'cursor-pointer' : ''}`}
                 >
-                  <img 
-                    src={item.src} 
-                    alt={item.caption} 
+                  <img
+                    src={item.src}
+                    alt={item.caption}
                     loading="lazy"
                     className={`w-full h-auto transition-transform duration-700 ${!isAdmin ? 'group-hover:scale-110' : ''}`}
                   />
-                  
+
                   {/* Overlay for Caption */}
                   <div className={`absolute inset-0 bg-gradient-to-t from-[#06091a]/90 via-[#06091a]/40 to-transparent opacity-0 transition-opacity duration-300 flex flex-col justify-end p-5 ${!isAdmin ? 'group-hover:opacity-100' : 'opacity-100'}`}>
                     <span className="text-xs font-medium text-accent uppercase tracking-wider mb-1 block">
@@ -324,14 +323,14 @@ const Gallery = () => {
                   {/* Admin Actions Overlay */}
                   {isAdmin && (
                     <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
+                      <button
                         onClick={(e) => openEditModal(item, e)}
                         className="w-9 h-9 rounded-full bg-blue-500/80 backdrop-blur-sm text-white hover:bg-blue-600 flex items-center justify-center transition-colors shadow-lg"
                         title="Edit Foto"
                       >
                         <Edit2 size={16} />
                       </button>
-                      <button 
+                      <button
                         onClick={(e) => handleDelete(item.id, e)}
                         className="w-9 h-9 rounded-full bg-danger/80 backdrop-blur-sm text-white hover:bg-red-600 flex items-center justify-center transition-colors shadow-lg"
                         title="Hapus Foto"
@@ -365,33 +364,33 @@ const Gallery = () => {
             onClick={closeLightbox}
           >
             <div className="relative w-full max-w-5xl h-full p-4 md:p-10 flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
-              
-              <button 
+
+              <button
                 onClick={closeLightbox}
                 className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-accent hover:text-bg-primary flex items-center justify-center transition-colors text-white z-50"
               >
                 <X size={24} />
               </button>
 
-              <button 
+              <button
                 onClick={() => navigateLightbox(-1)}
                 className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-accent hover:text-bg-primary flex items-center justify-center transition-colors text-white z-50"
               >
                 <ChevronLeft size={24} />
               </button>
 
-              <motion.img 
+              <motion.img
                 key={currentIndex}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                src={filteredGallery[currentIndex].src} 
+                src={filteredGallery[currentIndex].src}
                 alt={filteredGallery[currentIndex].caption}
                 className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
               />
-              
-              <motion.p 
+
+              <motion.p
                 key={`caption-${currentIndex}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -401,7 +400,7 @@ const Gallery = () => {
                 {filteredGallery[currentIndex].caption}
               </motion.p>
 
-              <button 
+              <button
                 onClick={() => navigateLightbox(1)}
                 className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-accent hover:text-bg-primary flex items-center justify-center transition-colors text-white z-50"
               >
@@ -415,25 +414,25 @@ const Gallery = () => {
       {/* Token Prompt Modal */}
       <AnimatePresence>
         {showTokenPrompt && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-[#06091a]/80 backdrop-blur-sm flex items-center justify-center p-4"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               className="bg-bg-card border border-border-primary rounded-2xl w-full max-w-sm p-6 relative shadow-2xl"
             >
-              <button 
+              <button
                 onClick={() => setShowTokenPrompt(false)}
                 className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
               >
                 <X size={20} />
               </button>
-              
+
               <div className="w-12 h-12 rounded-full bg-accent/20 border border-accent/50 text-accent flex items-center justify-center mb-4 mx-auto">
                 <ShieldAlert size={24} />
               </div>
@@ -441,7 +440,7 @@ const Gallery = () => {
               <p className="text-sm text-text-secondary text-center mb-6">
                 Masukkan token untuk mengakses fitur tambah, edit, dan hapus foto galeri.
               </p>
-              
+
               <form onSubmit={handleTokenSubmit}>
                 <div className="mb-4">
                   <input
@@ -457,7 +456,7 @@ const Gallery = () => {
                   />
                   {tokenError && <p className="text-danger text-xs text-center mt-2">{tokenError}</p>}
                 </div>
-                <button 
+                <button
                   type="submit"
                   className="w-full bg-accent hover:bg-[#e6a800] text-bg-primary font-bold py-3 rounded-lg transition-all"
                 >
@@ -472,40 +471,40 @@ const Gallery = () => {
       {/* Add/Edit Modal */}
       <AnimatePresence>
         {(isAdding || editingItem) && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-[#06091a]/80 backdrop-blur-sm flex items-center justify-center p-4"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               className="bg-bg-card border border-border-primary rounded-2xl w-full max-w-md p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
-              <button 
+              <button
                 onClick={() => { setIsAdding(false); setEditingItem(null); }}
                 className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
               >
                 <X size={20} />
               </button>
-              
+
               <h3 className="text-xl font-bold mb-6">
                 {isAdding ? 'Tambah Foto Galeri' : 'Edit Foto Galeri'}
               </h3>
-              
+
               <form onSubmit={handleEditSubmit} className="space-y-4">
-                
+
                 {/* Photo Upload */}
                 <div>
                   <label className="block text-sm font-medium text-text-secondary mb-1.5">Foto Galeri</label>
                   <div className="flex flex-col gap-4">
                     {editForm.src && (
                       <div className="w-full h-40 bg-black/50 rounded-lg overflow-hidden border border-border-primary flex items-center justify-center">
-                        <img 
-                          src={editForm.src} 
-                          alt="Preview" 
+                        <img
+                          src={editForm.src}
+                          alt="Preview"
                           className="max-w-full max-h-full object-contain"
                         />
                       </div>
@@ -515,11 +514,11 @@ const Gallery = () => {
                         <Upload size={16} />
                         <span>Pilih File Gambar Baru...</span>
                       </div>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        className="hidden" 
-                        onChange={handlePhotoUpload} 
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handlePhotoUpload}
                       />
                     </label>
                   </div>
@@ -531,7 +530,7 @@ const Gallery = () => {
                   <input
                     type="text"
                     value={editForm.caption}
-                    onChange={(e) => setEditForm({...editForm, caption: e.target.value})}
+                    onChange={(e) => setEditForm({ ...editForm, caption: e.target.value })}
                     placeholder="Tulis deskripsi momen ini..."
                     required
                     className="w-full bg-[#0a0e28] border border-border-primary rounded-lg py-2.5 px-4 focus:outline-none focus:border-accent transition-all text-sm"
@@ -541,7 +540,7 @@ const Gallery = () => {
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium text-text-secondary mb-1.5">Kategori</label>
-                  
+
                   {/* Pilihan Kategori yang sudah ada */}
                   <div className="flex flex-wrap gap-2 mb-3">
                     {dynamicFilters.filter(f => f.id !== 'semua').map(f => {
@@ -550,26 +549,24 @@ const Gallery = () => {
                         <div key={f.id} className="relative inline-flex items-center">
                           <button
                             type="button"
-                            onClick={() => setEditForm({...editForm, category: f.id})}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                              editForm.category === f.id
+                            onClick={() => setEditForm({ ...editForm, category: f.id })}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${editForm.category === f.id
                                 ? 'bg-accent text-bg-primary shadow-md'
                                 : 'bg-glass border border-border-primary text-text-secondary hover:border-accent hover:text-accent'
-                            } ${!isDefault ? 'pr-8' : ''}`}
+                              } ${!isDefault ? 'pr-8' : ''}`}
                           >
                             {f.label}
                           </button>
-                          
+
                           {/* Tombol Hapus Kategori (hanya untuk custom) */}
                           {!isDefault && (
                             <button
                               type="button"
                               onClick={(e) => handleDeleteCategory(f.id, e)}
-                              className={`absolute right-1 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
-                                editForm.category === f.id
+                              className={`absolute right-1 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${editForm.category === f.id
                                   ? 'text-bg-primary hover:bg-black/20'
                                   : 'text-text-muted hover:text-danger hover:bg-danger/20'
-                              }`}
+                                }`}
                               title="Hapus Kategori (Pindahkan isinya ke Akademik)"
                             >
                               <X size={12} strokeWidth={3} />
@@ -585,14 +582,14 @@ const Gallery = () => {
                     <input
                       type="text"
                       value={editForm.category}
-                      onChange={(e) => setEditForm({...editForm, category: e.target.value.toLowerCase()})}
+                      onChange={(e) => setEditForm({ ...editForm, category: e.target.value.toLowerCase() })}
                       placeholder="Atau ketik nama kategori baru..."
                       required
                       className="flex-1 bg-[#0a0e28] border border-border-primary rounded-lg py-2.5 px-4 focus:outline-none focus:border-accent transition-all text-sm"
                     />
                     <button
                       type="button"
-                      onClick={() => setEditForm({...editForm, category: ''})}
+                      onClick={() => setEditForm({ ...editForm, category: '' })}
                       className="px-4 py-2.5 bg-danger/20 text-danger hover:bg-danger hover:text-white rounded-lg transition-colors flex items-center justify-center"
                       title="Hapus / Kosongkan Kategori"
                     >
@@ -603,16 +600,16 @@ const Gallery = () => {
                     Pilih kategori di atas atau ketik baru. Kategori otomatis terhapus dari website jika tidak ada foto yang menggunakannya.
                   </p>
                 </div>
-                
+
                 <div className="pt-4 flex gap-3">
-                  <button 
+                  <button
                     type="button"
                     onClick={() => { setIsAdding(false); setEditingItem(null); }}
                     className="flex-1 bg-glass border border-border-primary hover:bg-glass-strong text-text-primary py-2.5 rounded-lg transition-all font-medium"
                   >
                     Batal
                   </button>
-                  <button 
+                  <button
                     type="submit"
                     className="flex-1 bg-accent hover:bg-[#e6a800] text-bg-primary py-2.5 rounded-lg transition-all font-bold flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(240,192,64,0.3)]"
                   >
