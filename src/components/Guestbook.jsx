@@ -10,7 +10,7 @@ const Guestbook = () => {
   const [messages, setMessages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  
+
   // Admin State
   const [isAdmin, setIsAdmin] = useState(false);
   const [showTokenPrompt, setShowTokenPrompt] = useState(false);
@@ -74,15 +74,15 @@ const Guestbook = () => {
         message: message.trim(),
         timestamp: new Date().toISOString()
       };
-      
+
       const res = await fetch('/api/guestbook', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMessage)
       });
-      
+
       if (!res.ok) throw new Error('Gagal mengirim');
-      
+
       setMessages([newMessage, ...messages]);
       setName('');
       setMessage('');
@@ -111,7 +111,7 @@ const Guestbook = () => {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border-primary to-transparent" />
 
       <div className="container-custom relative z-10">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -123,7 +123,7 @@ const Guestbook = () => {
               <MessageSquare size={16} /> Buku Tamu
             </div>
             {!isAdmin ? (
-              <button 
+              <button
                 onClick={() => setShowTokenPrompt(true)}
                 className="p-2 text-text-muted hover:text-accent bg-glass-strong hover:bg-white/10 rounded-full transition-all"
                 title="Masuk Mode Admin"
@@ -131,7 +131,7 @@ const Guestbook = () => {
                 <Settings size={16} />
               </button>
             ) : (
-              <button 
+              <button
                 onClick={() => setIsAdmin(false)}
                 className="px-4 py-1.5 text-xs font-bold text-white bg-danger rounded-full transition-colors hover:bg-red-600 flex items-center gap-1 shadow-lg"
                 title="Keluar Mode Admin"
@@ -141,12 +141,12 @@ const Guestbook = () => {
             )}
           </div>
           <h2 className="section-title">Tinggalkan Pesan untuk Kami</h2>
-          <p className="section-subtitle">Kesan, pesan, atau ucapan — kami menghargai setiap kata dari kalian.</p>
+          <p className="section-subtitle">Kesan, pesan, atau ucapan kami menghargai setiap kata dari kalian.</p>
         </motion.div>
 
         <div className="grid md:grid-cols-5 gap-8 max-w-5xl mx-auto">
           {/* Form */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -174,7 +174,7 @@ const Guestbook = () => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-text-secondary mb-1.5" htmlFor="message">Pesan <span className="text-danger">*</span></label>
                 <textarea
@@ -187,22 +187,20 @@ const Guestbook = () => {
                   placeholder="Tulis pesan, kesan, atau ucapanmu di sini..."
                   maxLength={500}
                   rows={4}
-                  className={`w-full bg-[#0a0e28] border rounded-lg p-4 text-text-primary focus:outline-none focus:ring-1 transition-all resize-none ${
-                    error ? 'border-danger focus:border-danger focus:ring-danger' : 'border-border-primary focus:border-accent focus:ring-accent'
-                  }`}
+                  className={`w-full bg-[#0a0e28] border rounded-lg p-4 text-text-primary focus:outline-none focus:ring-1 transition-all resize-none ${error ? 'border-danger focus:border-danger focus:ring-danger' : 'border-border-primary focus:border-accent focus:ring-accent'
+                    }`}
                 />
                 {error && <p className="text-danger text-xs mt-1.5 flex items-center gap-1">⚠️ {error}</p>}
                 <p className="text-right text-xs text-text-muted mt-1">{message.length}/500</p>
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isSubmitting}
-                className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold transition-all ${
-                  isSubmitting 
-                    ? 'bg-glass-strong text-text-muted cursor-not-allowed' 
+                className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold transition-all ${isSubmitting
+                    ? 'bg-glass-strong text-text-muted cursor-not-allowed'
                     : 'bg-accent hover:bg-[#e6a800] text-bg-primary shadow-[0_4px_15px_rgba(240,192,64,0.3)] hover:shadow-[0_8px_25px_rgba(240,192,64,0.4)] hover:-translate-y-0.5'
-                }`}
+                  }`}
               >
                 {isSubmitting ? 'Mengirim...' : (
                   <>Kirim Pesan <Send size={18} /></>
@@ -212,7 +210,7 @@ const Guestbook = () => {
           </motion.div>
 
           {/* Feed */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -276,34 +274,34 @@ const Guestbook = () => {
       {/* Admin Token Modal */}
       <AnimatePresence>
         {showTokenPrompt && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-[#06091a]/80 backdrop-blur-sm flex items-center justify-center p-4"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               className="bg-bg-secondary border border-border-primary p-6 md:p-8 rounded-2xl max-w-sm w-full shadow-elevated relative"
             >
-              <button 
+              <button
                 onClick={() => setShowTokenPrompt(false)}
                 className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
               >
                 <X size={20} />
               </button>
-              
+
               <div className="w-12 h-12 rounded-full bg-accent/20 border border-accent/50 text-accent flex items-center justify-center mb-4 mx-auto">
                 <ShieldAlert size={24} />
               </div>
-              
+
               <h3 className="text-xl font-bold text-center mb-2">Mode Admin Buku Tamu</h3>
               <p className="text-sm text-text-secondary text-center mb-6">
                 Masukkan token untuk menghapus komentar.
               </p>
-              
+
               <form onSubmit={handleTokenSubmit}>
                 <div className="mb-4">
                   <input
@@ -319,7 +317,7 @@ const Guestbook = () => {
                   />
                   {tokenError && <p className="text-danger text-xs text-center mt-2">{tokenError}</p>}
                 </div>
-                <button 
+                <button
                   type="submit"
                   className="w-full bg-accent hover:bg-[#e6a800] text-bg-primary font-bold py-3 rounded-lg transition-all"
                 >
